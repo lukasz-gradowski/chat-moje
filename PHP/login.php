@@ -50,8 +50,8 @@ if (isset($_GET['login']) && isset($_GET['password'])) {
 	}
 } else {
 	//Nie poprawne dane
-		$response["success"] = 0;
-        	$response["message"] = "Niepoprawne dane.";
-		echo json_encode($response);
-		header('Location: index.php');
+	$response["success"] = 0;
+        $response["message"] = "Niepoprawne dane.";
+	echo json_encode($response);
+	header('Location: index.php');
 }
