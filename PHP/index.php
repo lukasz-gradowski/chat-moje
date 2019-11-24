@@ -1,6 +1,13 @@
 <?php
 session_start();
+if(isset($_SESSION['result']))
+{
+   echo $_SESSION['result'];
+   unset($_SESSION['result']);
+   exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
