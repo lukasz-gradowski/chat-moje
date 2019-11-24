@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        login = (EditText) findViewById(R.id.editText8);
-        haslo = (EditText) findViewById(R.id.editText7);
+        login = (EditText) findViewById(R.id.Login);
+        haslo = (EditText) findViewById(R.id.Password);
         zaloguj = (Button) findViewById(R.id.button2);
 
         /*zaloguj.setOnClickListener(new View.OnClickListener() {
