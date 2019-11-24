@@ -27,8 +27,15 @@ if (isset($_GET['login']) && isset($_GET['password'])) {
 		$query = $db->query($sql);
 		$count = $query->fetchColumn();
 		echo ($count);
+		$response["success"] = 1;
+        	$response["message"] = "Zostałeś zalogowany.";
+		echo json_encode($response);
+
 	} else {
 		//Nie poprawne dane
+		$response["success"] = 0;
+        	$response["message"] = "Niepoprawne dane.";
+		echo json_encode($response);
 		header('Location: index.php');
 	}
 
@@ -36,8 +43,15 @@ if (isset($_GET['login']) && isset($_GET['password'])) {
 		$query = $db->query("UPDATE users SET is_online = 1 WHERE login = '{$login}' AND pass = '{$hash}'");
 	} else {
 		//Nie poprawne dane
+		$response["success"] = 0;
+        	$response["message"] = "Niepoprawne dane.";
+		echo json_encode($response);
 		header('Location: index.php');
 	}
 } else {
-	header('Location: index.php');
+	//Nie poprawne dane
+		$response["success"] = 0;
+        	$response["message"] = "Niepoprawne dane.";
+		echo json_encode($response);
+		header('Location: index.php');
 }
