@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button zaloguj;
-    EditText login, haslo, potwierdz;
-    CheckBox check;
+    Button zaloguj, zarejestruj;
+    EditText login, haslo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
         login = (EditText) findViewById(R.id.Login);
         haslo = (EditText) findViewById(R.id.Password);
         zaloguj = (Button) findViewById(R.id.button2);
-        check = (CheckBox) findViewById(R.id.checkBox2);
-        potwierdz = (EditText) findViewById(R.id.Confirm);
+        zarejestruj = (Button) findViewById(R.id.button);
 
         /*zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,14 +37,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        check.setOnClickListener(new View.OnClickListener(){
+        zarejestruj.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(MainActivity.this, RegulaminActivity.class);
+                intent = new Intent(MainActivity.this, RejestracjaActivity.class);
                 startActivity(intent);
             }
         });
+
 
 
 
@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 String pierwsza = login.getText().toString();
                 String druga = haslo.getText().toString();
-                String trzecia = potwierdz.getText().toString();
-                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")&&trzecia.equals(druga)&&check.isChecked()){
+                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")){
 
                     intent = new Intent(MainActivity.this, WypActivity.class);
                     startActivity(intent);
