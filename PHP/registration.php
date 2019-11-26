@@ -18,7 +18,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 		$sql = "INSERT INTO users VALUES (NULL, :login, :password, 0, '$data')";
 		$query = $db->prepare($sql);
 		$query->execute([':login' => $login, ':password' => $hash]);
-		print_r($query);
+		//print_r($query);
 		$response["success"] = 1;
 		$response["message"] = "Zostałeś zarejestrowany.";
 		echo json_encode($response);
@@ -28,6 +28,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 		$response["message"] = "Istnieje użytkownik o takim loginie.";
 		$_SESSION["result"] = json_encode($response);
 		header('Location: index.php');
+		exit;
 	}
 } else {
 	//Nie poprawne dane
