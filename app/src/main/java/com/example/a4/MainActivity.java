@@ -55,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 String log = login.getText().toString();
                 String password = haslo.getText().toString();
+                // curl -X GET "http://127.0.0.1:81/PHP/login.php?login=janusz&password=test"
+                // curl -X POST "http://127.0.0.1:81/PHP/registration.php" --data "login=bar1&password=bar2"
+                // curl -X POST -d "login=janusz&password=bar2" "http://127.0.0.1:81/PHP/registration.php"
+                //-o, --output <file>
+                // -l
+
                 if(log.equals("lukasz")&&password.equals("pluto12")){
 
                     intent = new Intent(MainActivity.this, WypActivity.class);
