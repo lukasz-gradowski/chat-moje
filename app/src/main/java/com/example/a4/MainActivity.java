@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button zaloguj;
+    Button zaloguj, zarejestruj;
     EditText login, haslo;
-    CheckBox check;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         login = (EditText) findViewById(R.id.Login);
         haslo = (EditText) findViewById(R.id.Password);
         zaloguj = (Button) findViewById(R.id.button2);
-        check = (CheckBox) findViewById(R.id.checkBox2);
+        zarejestruj = (Button) findViewById(R.id.button);
 
         /*zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,13 +37,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+        zarejestruj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, RejestracjaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
         zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
                 String pierwsza = login.getText().toString();
                 String druga = haslo.getText().toString();
-                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")&&check.isChecked()){
+                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")){
 
                     intent = new Intent(MainActivity.this, WypActivity.class);
                     startActivity(intent);
