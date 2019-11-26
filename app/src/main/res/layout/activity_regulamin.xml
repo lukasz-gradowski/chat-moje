@@ -25,7 +25,8 @@
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView hvhufshhduyg iyguiuyuiuiyudAFd\nbbkucudkuck\nuchiudhchdsuhiuv\ngtcaufufcuu ugivueu uevfigu uwifyyf fy iyfryfu iyf uwyf ruwyf w ryegyguyergfrgywr ywqgfuuq"
+
+                android:text="@string/dlugi"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
