@@ -39,10 +39,10 @@ public class RejestracjaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                String pierwsza = login.getText().toString();
-                String druga = haslo.getText().toString();
-                String trzecia = potwierdz.getText().toString();
-                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")&&trzecia.equals(druga)&&check.isChecked()){
+                String log = login.getText().toString();
+                String password = haslo.getText().toString();
+                String confirm = potwierdz.getText().toString();
+                if(log.equals("lukasz")&&password.equals("pluto12")&&confirm.equals(password)&&check.isChecked()){
 
                     intent = new Intent(RejestracjaActivity.this, WypActivity.class);
                     startActivity(intent);

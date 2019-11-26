@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                String pierwsza = login.getText().toString();
-                String druga = haslo.getText().toString();
-                if(pierwsza.equals("lukasz")&&druga.equals("pluto12")){
+                String log = login.getText().toString();
+                String password = haslo.getText().toString();
+                if(log.equals("lukasz")&&password.equals("pluto12")){
 
                     intent = new Intent(MainActivity.this, WypActivity.class);
                     startActivity(intent);
