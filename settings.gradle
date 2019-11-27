@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='4'
+rootProject.name='AndroChat'
