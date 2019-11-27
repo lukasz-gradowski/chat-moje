@@ -1,0 +1,13 @@
+DOKUMENTACJA API.
+Dostępne Metody.
+LOGOWANIE [GET]: http://127.0.0.1:81/PHPv2/login.php
+Przykład:
+http://127.0.0.1:81/PHPv2/login.php?login=janusz&password=tests
+Przyjmuje parametry login, hasło.
+Zwraca jsona.
+REJESTRACJA [POST]: http://127.0.0.1:81/PHPv2/registration.php
+Przyjmuje parametry login, hasło.
+Zwraca Jsona.
+WYLOGOWANIE [PUT]: http://127.0.0.1:81/PHPv2/logout.php
+Przyjmuje parametr login.
+Zwraca Jsona.
