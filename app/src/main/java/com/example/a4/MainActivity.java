@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 // curl -X POST -d "login=janusz&password=bar2" "http://127.0.0.1:81/PHP/registration.php"
                 //-o, --output <file>
                 // -l
+                //curl -c cookie.txt https://oursite/a
+                //curl -b cookie.txt https://oursite/b
 
                 if(log.equals("lukasz")&&password.equals("pluto12")){
 
