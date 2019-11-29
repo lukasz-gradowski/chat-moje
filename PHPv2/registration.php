@@ -10,12 +10,12 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 	$query = $db->prepare($sql);
 	$query->bindValue(':login', $login, PDO::PARAM_STR);
 	$query->execute();
-	$count = $query->fetchColumn();
+	$count = $query->rowCount();
 
 	if ($count == 0) { //Poprawna walidacja
 		$hash = password_hash($password, PASSWORD_DEFAULT);
 		$data  = date("Y-m-d H:i:s");
-		$sql = "INSERT INTO users VALUES (NULL, :login, :password, 0, '$data')";
+		$sql = "INSERT INTO users (id, login, pass, is_online, data_add) VALUES (NULL, :login, :password, 0, '$data')";
 		$query = $db->prepare($sql);
 		$query->execute([':login' => $login, ':password' => $hash]);
 		//print_r($query);
