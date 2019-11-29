@@ -11,3 +11,6 @@ Zwraca Jsona.
 WYLOGOWANIE [PUT]: http://127.0.0.1:81/PHPv2/logout.php
 Przyjmuje parametr login.
 Zwraca Jsona.
+Zmiana kanału [PUT]: http://127.0.0.1:81/PHPv2/chanel.php
+Przyjmuje parametr login i numer kanału.
+Zwraca Jsona.
