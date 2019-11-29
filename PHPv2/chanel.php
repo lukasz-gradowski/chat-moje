@@ -16,7 +16,7 @@ if (isset($_PUT['login']) && isset($_PUT['chanel'])) {
 	$query = $db->prepare($sql);
 	$query->bindValue(':login', $login, PDO::PARAM_STR);
 	$query->execute();
-	$count = $query->fetchColumn();
+	$count = $query->rowCount();
 
 	if ($count == 1) {
 		$sql = " UPDATE users SET chanel = :chanel WHERE login = :login";

@@ -12,7 +12,7 @@ if (isset($_GET['login']) && isset($_GET['password'])) {
 	$query = $db->prepare($sql);
 	$query->bindValue(':login', $login, PDO::PARAM_STR);
 	$query->execute();
-	$count = $query->fetchColumn();
+	$count = $query->rowCount();
 
 	if ($count != 1) {
 		$response["success"] = 0;
@@ -31,7 +31,7 @@ if (isset($_GET['login']) && isset($_GET['password'])) {
 	// $sql = "SELECT * FROM users WHERE login = :login AND pass = :password";
 	// $query = $db->prepare($sql);
 	// $query->execute([':login' => $login, ':password' => $password]);
-	// $count = $query->fetchColumn();
+	// $count = $query->rowCount();
 	// echo($count);
 
 	if (password_verify($password, $hash) && $count == 1) {
