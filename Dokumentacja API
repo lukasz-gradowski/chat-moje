@@ -14,3 +14,6 @@ Zwraca Jsona.
 Zmiana kanału [PUT]: http://127.0.0.1:81/PHPv2/chanel.php
 Przyjmuje parametr login i numer kanału.
 Zwraca Jsona.
+Pobranie wiadomośći [GET] http://127.0.0.1:81/PHPv2/getMessage.php?chanel=1
+Przyjmuje parametr chanel.
+Zwraca Jsona [Max 100 wiadomości]
