@@ -2,18 +2,19 @@ package com.example.a4;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
     EditText login, haslo;
-
+    String txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 //-o, --output <file>
                 // -l
                 //curl -c cookie.txt https://oursite/a
-                //curl -b cookie.txt https://oursite/b
+                //curl -b cookie.txt https://oursit
 
                 if(log.equals("lukasz")&&password.equals("pluto12")){
 
@@ -72,6 +73,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences sharedPref = getSharedPreferences("dane", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("login", login.getText().toString());
+        editor.apply();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPref = getSharedPreferences("dane", Context.MODE_PRIVATE);
+        txt = sharedPref.getString("login", "");
+        login.setText(txt);
+    }
+
 
     /*public void click(View view) {
         Intent intent;
