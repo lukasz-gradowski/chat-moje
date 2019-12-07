@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
                 OkHttpClient zapytanie = new OkHttpClient();
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("login", "some_email")
-                        .add("password", "some_password")
+                        .add("login", log)
+                        .add("password", password)
                         .build();
                 final Request request = new Request.Builder()
                         .header("Content-Type", "application/x-www-form-urlencoded")
