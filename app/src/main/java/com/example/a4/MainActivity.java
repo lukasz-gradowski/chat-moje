@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 final Request request = new Request.Builder()
                         .header("Content-Type", "application/x-www-form-urlencoded")
                         .url("http://127.0.0.1:81/PHPv2/registration.php")
+                        //.url("https://garlic-dragon.000webhostapp.com/registration.php")
                         .post(requestBody)
                         .build();
                 try {
