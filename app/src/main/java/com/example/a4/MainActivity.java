@@ -12,12 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import java.io.IOException;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
@@ -65,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 // curl -X POST "http://127.0.0.1:81/PHP/registration.php" --data "login=bar1&password=bar2"
                 // curl -X POST -d "login=janusz&password=bar2" "http://127.0.0.1:81/PHP/registration.php"
 
+                OkHttpClient zapytanie = new OkHttpClient();
                 RequestBody requestBody = new FormBody.Builder()
                         .add("login", "some_email")
                         .add("password", "some_password")
@@ -74,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
                         .url("http://127.0.0.1:81/PHPv2/registration.php")
                         .post(requestBody)
                         .build();
+                try {
+                    Response response = zapytanie.newCall(request).execute();
+                    Toast.makeText(getApplicationContext(), "This is my Toast message!",
+                            Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), e.toString(),
+                            Toast.LENGTH_LONG).show();
+                }
 
                 if(log.equals("lukasz")&&password.equals("pluto12")){
                     intent = new Intent(MainActivity.this, WypActivity.class);
@@ -81,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
@@ -92,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("login", login.getText().toString());
         editor.apply();
-
     }
 
     @Override
@@ -104,14 +110,11 @@ public class MainActivity extends AppCompatActivity {
         login.setText(txt);
     }
 
-
     /*public void click(View view) {
         Intent intent;
         if(view.getId()==R.id.button2){
             intent=new Intent(MainActivity.this, wyp.class);
             startActivity(intent);
-
-
         }
     }*/
 }
