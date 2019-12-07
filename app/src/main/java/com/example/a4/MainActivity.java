@@ -9,6 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import java.io.IOException;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,13 +64,18 @@ public class MainActivity extends AppCompatActivity {
                 // curl -X GET "http://127.0.0.1:81/PHP/login.php?login=janusz&password=test"
                 // curl -X POST "http://127.0.0.1:81/PHP/registration.php" --data "login=bar1&password=bar2"
                 // curl -X POST -d "login=janusz&password=bar2" "http://127.0.0.1:81/PHP/registration.php"
-                //-o, --output <file>
-                // -l
-                //curl -c cookie.txt https://oursite/a
-                //curl -b cookie.txt https://oursit
+
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("login", "some_email")
+                        .add("password", "some_password")
+                        .build();
+                final Request request = new Request.Builder()
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .url("http://127.0.0.1:81/PHPv2/registration.php")
+                        .post(requestBody)
+                        .build();
 
                 if(log.equals("lukasz")&&password.equals("pluto12")){
-
                     intent = new Intent(MainActivity.this, WypActivity.class);
                     startActivity(intent);
                 }
