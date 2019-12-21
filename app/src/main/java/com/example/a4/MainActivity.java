@@ -1,7 +1,5 @@
 package com.example.a4;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        login = (EditText) findViewById(R.id.Login);
-        haslo = (EditText) findViewById(R.id.Password);
-        zaloguj = (Button) findViewById(R.id.button2);
-        zarejestruj = (Button) findViewById(R.id.button);
+        login = findViewById(R.id.Login);
+        haslo = findViewById(R.id.Password);
+        zaloguj = findViewById(R.id.button2);
+        zarejestruj = findViewById(R.id.button);
 
         /*zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,21 +72,30 @@ public class MainActivity extends AppCompatActivity {
                         .build();
                 final Request request = new Request.Builder()
                         .header("Content-Type", "application/x-www-form-urlencoded")
-                        .url("http://127.0.0.1:81/PHPv2/registration.php")
-                        //.url("https://garlic-dragon.000webhostapp.com/registration.php")
+                        //.url("http://192.168.43.168:81/PHPv2/registration.php")
+                        .url("https://garlic-dragon.000webhostapp.com/registration.php")
                         .post(requestBody)
                         .build();
-                try {
-                    Response response = zapytanie.newCall(request).execute();
-                    Toast.makeText(getApplicationContext(), "This is my Toast message!",
-                            Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), e.toString(),
-                            Toast.LENGTH_LONG).show();
-                }
+                zapytanie.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            //Succes
+                            String result = response.toString();
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                        } else {
+                            // Request not successful
+                            Toast.makeText(getApplicationContext(), "This is my fail!", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                if(log.equals("lukasz")&&password.equals("pluto12")){
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        // Request not successful
+                    }
+                });
+
+                if (log.equals("lukasz") && password.equals("pluto12")) {
                     intent = new Intent(MainActivity.this, WypActivity.class);
                     startActivity(intent);
                 }
