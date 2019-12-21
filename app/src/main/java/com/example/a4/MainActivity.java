@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(@NotNull Call call, @NotNull Response response) {
                         if (response.isSuccessful()) {
                             //Succes
-                            String result = response.toString();
+                            String result = response.body().toString();
                             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
                         } else {
                             // Request not successful
