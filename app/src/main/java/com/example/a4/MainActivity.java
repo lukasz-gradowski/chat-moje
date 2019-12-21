@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
                 zapytanie.newCall(request).enqueue(new Callback() {
                     @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    public void onResponse(@NotNull Call call, @NotNull Response response) {
                         if (response.isSuccessful()) {
                             //Succes
                             String result = response.toString();
