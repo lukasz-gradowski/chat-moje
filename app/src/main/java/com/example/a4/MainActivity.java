@@ -92,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "This is my fail!", Toast.LENGTH_LONG).show();
                         }
                     }
-
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                         // Request not successful
+                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
 
