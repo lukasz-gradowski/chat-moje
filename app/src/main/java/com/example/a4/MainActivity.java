@@ -4,10 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
@@ -18,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         login = findViewById(R.id.Login);
         haslo = findViewById(R.id.Password);
         zaloguj = findViewById(R.id.button2);
@@ -38,10 +45,28 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 String log = login.getText().toString();
                 String password = haslo.getText().toString();
-                // http://127.0.0.1:81/PHP/login.php?login=janusz&password=test"
-                // http://127.0.0.1:81/PHP/registration.php" --data "login=bar1&password=bar2"
 
-                if (log.equals("lukasz") && password.equals("pluto12")) {
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final Map<String, Object> user = new HashMap<>();
+                user.put("users", log);
+                user.put("haslo", password);
+                user.put("is_online", 1);
+
+                if (log.equals("lukasz") && password.equals("pluto13")) {
+                    db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Dodanie", "Error adding document", e);
+                                }
+                            });
                     intent = new Intent(MainActivity.this, Chat.class);
                     startActivity(intent);
                 }
