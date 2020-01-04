@@ -1,25 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WypActivity">
+    tools:context=".Chat">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/infoBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="40dp"
+        android:orientation="vertical" >
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/your_nick" />
+        <View
+            android:id="@+id/nickDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_below="@+id/infoBar"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/inputBar"
+        android:layout_width="411dp"
+        android:layout_height="94dp"
+        android:layout_below="@+id/content"
+        android:layout_marginTop="640dp"
+        android:layout_y="600dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/textMessage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="296dp"
-            android:layout_marginEnd="125dp"
-            android:layout_marginRight="125dp"
-            android:text="BRAWO!"
-            android:textSize="45sp" />
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+        <Button
+            android:id="@+id/sendMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Send" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
