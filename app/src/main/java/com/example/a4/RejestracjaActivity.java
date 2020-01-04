@@ -51,7 +51,6 @@ public class RejestracjaActivity extends AppCompatActivity {
         zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 final String log = login.getText().toString();
                 final String password = haslo.getText().toString();
                 final String confirm = potwierdz.getText().toString();
