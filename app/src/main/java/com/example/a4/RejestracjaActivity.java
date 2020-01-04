@@ -43,8 +43,7 @@ public class RejestracjaActivity extends AppCompatActivity {
                 String password = haslo.getText().toString();
                 String confirm = potwierdz.getText().toString();
                 if (log.equals("lukasz") && password.equals("pluto12") && confirm.equals(password) && check.isChecked()) {
-
-                    intent = new Intent(RejestracjaActivity.this, WypActivity.class);
+                    intent = new Intent(RejestracjaActivity.this, Chat.class);
                     startActivity(intent);
                 }
             }
