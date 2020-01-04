@@ -60,7 +60,7 @@ public class RejestracjaActivity extends AppCompatActivity {
                 String confirm = potwierdz.getText().toString();
 
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference docRef = db.collection("users").document("0LjvqVzK0UjGXDc1w3Aj");
+                DocumentReference docRef = db.collection("users").document(log);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -123,6 +123,29 @@ public class RejestracjaActivity extends AppCompatActivity {
         String txt = sharedPref.getString("login", "");
         login.setText(txt);
     }
+
+
+
+
+
+    //                    db.collection("users").document(log)
+//                            .set(user)
+//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void aVoid) {
+//                                    Log.d("Dodanie", "DocumentSnapshot successfully written!");
+//                                }
+//                            })
+//                            .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Log.w("Dodanie", "Error writing document", e);
+//                                }
+//                            });
+
+
+
+
 
 
 }

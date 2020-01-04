@@ -8,13 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
@@ -41,52 +42,41 @@ public class MainActivity extends AppCompatActivity {
         zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 String log = login.getText().toString();
-                String password = haslo.getText().toString();
+                final String password = haslo.getText().toString();
 
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                final Map<String, Object> user = new HashMap<>();
-                user.put("users", log);
-                user.put("haslo", password);
-                user.put("is_online", 1);
+                //TODO is_online
 
-                if (log.equals("lukaszek") && password.equals("pluto13")) {
-//                    db.collection("users")
-//                            .add(user)
-//                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                @Override
-//                                public void onSuccess(DocumentReference documentReference) {
-//                                    Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Log.w("Dodanie", "Error adding document", e);
-//                                }
-//                            });
-
-                    db.collection("users").document(log)
-                            .set(user)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("Dodanie", "DocumentSnapshot successfully written!");
+                DocumentReference docRef = db.collection("users").document(log);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
+                                if(!document.getData().get("haslo").equals(password)){
+                                    Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
                                 }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("Dodanie", "Error writing document", e);
-                                }
-                            });
-
-                    intent = new Intent(MainActivity.this, Chat.class);
-                    startActivity(intent);
-                }
+                                else{toChat();}
+                            } else {
+                                //Log.d("Nie znaleziono usera", "No such document");
+                                Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            //Log.w("Błąd", "get failed with ", task.getException());
+                            Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
+    }
+    public void toChat() {
+        Intent intent;
+        intent = new Intent(MainActivity.this, Chat.class);
+        startActivity(intent);
     }
 
     @Override
