@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
     EditText login, haslo;
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String log = login.getText().toString();
                 final String password = haslo.getText().toString();
-
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //TODO is_online
 
@@ -56,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
-                                if(!document.getData().get("password").equals(password)){
+                                String password_db = document.getData().get("password").toString();
+                                //Log.d("Nie znaleziono usera", password_db+password);
+                                if(!BCrypt.checkpw(password, password_db)){
                                     Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
                                 }
                                 else{toChat();}
