@@ -4,10 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
@@ -18,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         login = findViewById(R.id.Login);
         haslo = findViewById(R.id.Password);
         zaloguj = findViewById(R.id.button2);
@@ -35,18 +42,41 @@ public class MainActivity extends AppCompatActivity {
         zaloguj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 String log = login.getText().toString();
-                String password = haslo.getText().toString();
-                // http://127.0.0.1:81/PHP/login.php?login=janusz&password=test"
-                // http://127.0.0.1:81/PHP/registration.php" --data "login=bar1&password=bar2"
+                final String password = haslo.getText().toString();
 
-                if (log.equals("lukasz") && password.equals("pluto12")) {
-                    intent = new Intent(MainActivity.this, Chat.class);
-                    startActivity(intent);
-                }
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //TODO is_online
+
+                DocumentReference docRef = db.collection("users").document(log);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
+                                if(!document.getData().get("password").equals(password)){
+                                    Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
+                                }
+                                else{toChat();}
+                            } else {
+                                //Log.d("Nie znaleziono usera", "No such document");
+                                Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            //Log.w("Błąd", "get failed with ", task.getException());
+                            Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
+    }
+    public void toChat() {
+        Intent intent;
+        intent = new Intent(MainActivity.this, Chat.class);
+        startActivity(intent);
     }
 
     @Override
