@@ -3,6 +3,8 @@ package com.example.a4;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,30 +51,38 @@ public class MainActivity extends AppCompatActivity {
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //TODO is_online
 
-                DocumentReference docRef = db.collection("users").document(log);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
-                                String password_db = document.getData().get("password").toString();
-                                //Log.d("Nie znaleziono usera", password_db+password);
-                                if(!BCrypt.checkpw(password, password_db)){
-                                    Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+                if (isConnected) {
+                    DocumentReference docRef = db.collection("users").document(log);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
+                                    String password_db = document.getData().get("password").toString();
+                                    //Log.d("Nie znaleziono usera", password_db+password);
+                                    if (!BCrypt.checkpw(password, password_db)) {
+                                        Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        toChat();
+                                    }
+                                } else {
+                                    //Log.d("Nie znaleziono usera", "No such document");
+                                    Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
                                 }
-                                else{toChat();}
                             } else {
-                                //Log.d("Nie znaleziono usera", "No such document");
-                                Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
+                                //Log.w("Błąd", "get failed with ", task.getException());
+                                Toast.makeText(getApplicationContext(), "Błąd logowania", Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            //Log.w("Błąd", "get failed with ", task.getException());
-                            Toast.makeText(getApplicationContext(), "Nie ma takiego użytkownika", Toast.LENGTH_LONG).show();
                         }
-                    }
-                });
+                    });
+                } else {
+                        Toast.makeText(getApplicationContext(), "Brak dostępu do internetu", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
