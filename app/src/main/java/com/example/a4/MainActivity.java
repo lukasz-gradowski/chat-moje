@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,21 +51,37 @@ public class MainActivity extends AppCompatActivity {
                 user.put("haslo", password);
                 user.put("is_online", 1);
 
-                if (log.equals("lukasz") && password.equals("pluto13")) {
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                if (log.equals("lukaszek") && password.equals("pluto13")) {
+//                    db.collection("users")
+//                            .add(user)
+//                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                @Override
+//                                public void onSuccess(DocumentReference documentReference) {
+//                                    Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
+//                                }
+//                            })
+//                            .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Log.w("Dodanie", "Error adding document", e);
+//                                }
+//                            });
+
+                    db.collection("users").document(log)
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("Dodanie", "DocumentSnapshot successfully written!");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w("Dodanie", "Error adding document", e);
+                                    Log.w("Dodanie", "Error writing document", e);
                                 }
                             });
+
                     intent = new Intent(MainActivity.this, Chat.class);
                     startActivity(intent);
                 }
