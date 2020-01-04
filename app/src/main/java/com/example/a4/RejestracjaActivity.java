@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,8 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +53,12 @@ public class RejestracjaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                String log = login.getText().toString();
-                String password = haslo.getText().toString();
-                String confirm = potwierdz.getText().toString();
+                final String log = login.getText().toString();
+                final String password = haslo.getText().toString();
+                final String confirm = potwierdz.getText().toString();
 
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
                 DocumentReference docRef = db.collection("users").document(log);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -67,44 +66,65 @@ public class RejestracjaActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.d("Walidacja", "DocumentSnapshot data: " + document.getData());
+                                Toast.makeText(getApplicationContext(), "Istnieje taki użytkownik", Toast.LENGTH_LONG).show();
                             } else {
-                                Log.d("Walidacja", "No such document");
+                                if (confirm.equals(password) && check.isChecked()) {
+                                    toRegistration(log, password, db);
+                                } else if(!password.equals(confirm)){
+                                    Toast.makeText(getApplicationContext(), "Hasła nie są takie same", Toast.LENGTH_LONG).show();
+                                } else if(!check.isChecked()){
+                                    Toast.makeText(getApplicationContext(), "Proszę potwierdzić regulamin", Toast.LENGTH_LONG).show();
+                                }
                             }
                         } else {
-                            Log.w("Error", "get failed with ", task.getException());
+                            //Log.w("Błąd", "get failed with ", task.getException());
+                            Toast.makeText(getApplicationContext(), "Błąd połączenia", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-
-
-                final Map<String, Object> user = new HashMap<>();
-                user.put("users", log);
-                user.put("haslo", password);
-                user.put("is_online", 1);
-
-                if (confirm.equals(password) && check.isChecked()) {
-
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("Dodanie", "Error adding document", e);
-                                }
-                            });
-
-                    intent = new Intent(RejestracjaActivity.this, Chat.class);
-                    startActivity(intent);
-                }
             }
         });
+    }
+
+    public void toRegistration(String log, String password, FirebaseFirestore db) {
+        final Map<String, Object> user = new HashMap<>();
+        //user.put("login", log);
+        user.put("password", password);
+        user.put("is_online", true);
+
+        db.collection("users").document(log)
+            .set(user)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("Dodanie", "DocumentSnapshot successfully written!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("Dodanie", "Error writing document", e);
+                }
+            });
+
+//        db.collection("users").document(log);
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d("DODANIE", "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w("Dodanie", "Error adding document", e);
+//                    }
+//                });
+        Intent intent;
+        intent = new Intent(RejestracjaActivity.this, Chat.class);
+        startActivity(intent);
     }
 
     @Override
@@ -123,29 +143,4 @@ public class RejestracjaActivity extends AppCompatActivity {
         String txt = sharedPref.getString("login", "");
         login.setText(txt);
     }
-
-
-
-
-
-    //                    db.collection("users").document(log)
-//                            .set(user)
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-//                                    Log.d("Dodanie", "DocumentSnapshot successfully written!");
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Log.w("Dodanie", "Error writing document", e);
-//                                }
-//                            });
-
-
-
-
-
-
 }

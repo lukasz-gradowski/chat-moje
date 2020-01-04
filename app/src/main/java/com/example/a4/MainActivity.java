@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d("Dane usera", "DocumentSnapshot data: " + document.getData().get("password"));
-                                if(!document.getData().get("haslo").equals(password)){
+                                if(!document.getData().get("password").equals(password)){
                                     Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
                                 }
                                 else{toChat();}
