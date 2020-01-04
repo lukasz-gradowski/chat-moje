@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "425180328722",
+    "firebase_url": "https://ahechat.firebaseio.com",
+    "project_id": "ahechat",
+    "storage_bucket": "ahechat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425180328722:android:b99ffbe6502423b9adb9cb",
+        "android_client_info": {
+          "package_name": "com.example.a4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425180328722-dkl4ufi2eg3o0dm1j8soq513jfo7g1qp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5PwC263WGnZ26HCsAtYWQasH13qL9TcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425180328722-dkl4ufi2eg3o0dm1j8soq513jfo7g1qp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
