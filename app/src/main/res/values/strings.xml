@@ -2,7 +2,22 @@
     <string name="app_name">KOMUNIKATOR</string>
     <string name="title_activity_wyp">wyp</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="dlugi">"\n\n                   REGULAMIN\n\n\nhvudskhkhvuukuu\njhvufhauvhkusvukhrghhgrghiorhoihforwhgohowhgoihwiehghrouvhuieafhiurhfiurhfhwaufhuegueriufhirhruehiuh\nuku\n\n\n\n\n\n\nbvkbbu\n\n\n\n\n\njioghorbrooronbornoio\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nuvuoiivhunvuhhsuoou\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nrjirirobijoijvojiorji\n\n\n\n\n\n\n\n\n\n\n\ngjvggyg"</string>
+    <string name="your_nick">"test"</string>
+    <string name="dlugi">"
+        <b>REGULAMIN CZATU \n\n</b>
+1. Nie reklamujemy innych czatów! \n
+2. Nie nadużywamy przekleństw! W dzień cenzurujemy w nocy po 23:00-06:00 nie, ale pamiętamy o umiarze! \n
+3. Nie spamujemy! \n
+4. Nie obrażamy, nie prowokujemy, nie kłócimy się, nie irytujemy, nie wywyższamy się, nie cwaniakujemy \n
+5. Nie ustawiamy wulgarnych nicków! (Obrażające drugie osoby jak i samego użytkownika) \n
+6. Nie szkodzimy czatowi! \n
+7. Unikamy błędów ortograficznych oraz slangu. \n
+8. Rozmowy o seksie od godziny 23:00 do 05:00! \n
+9. Nie podajemy danych osobowych nikogo! \n
+10. Logując się na czat automatycznie zobowiązujesz się do przestrzegania regulaminu. \n
+11. Osoby poniżej 13 roku życia nie mogą przebywać na czacie. \n
+Nie stosowanie się do powyższych punktów grozi banem! \n
+        "</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
