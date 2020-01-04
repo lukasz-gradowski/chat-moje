@@ -35,5 +35,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.0'
     implementation 'com.google.firebase:firebase-inappmessaging:19.0.2'
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
+
+    implementation "org.mindrot:jbcrypt:0.4"
 }
 apply plugin: 'com.google.gms.google-services'

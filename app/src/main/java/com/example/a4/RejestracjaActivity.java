@@ -19,6 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +57,7 @@ public class RejestracjaActivity extends AppCompatActivity {
                 final String log = login.getText().toString();
                 final String password = haslo.getText().toString();
                 final String confirm = potwierdz.getText().toString();
+                final String password_hash = BCrypt.hashpw(password, BCrypt.gensalt());
 
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -67,7 +71,7 @@ public class RejestracjaActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Istnieje taki użytkownik", Toast.LENGTH_LONG).show();
                             } else {
                                 if (confirm.equals(password) && check.isChecked()) {
-                                    toRegistration(log, password, db);
+                                    toRegistration(log, password_hash, db);
                                 } else if(!password.equals(confirm)){
                                     Toast.makeText(getApplicationContext(), "Hasła nie są takie same", Toast.LENGTH_LONG).show();
                                 } else if(!check.isChecked()){
