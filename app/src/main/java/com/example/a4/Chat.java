@@ -73,22 +73,24 @@ public class Chat extends AppCompatActivity {
         data.put("login", log);
         data.put("text", messToDb);
         data.put("time", Timestamp.now());
-        db.collection("messages")
-            .add(data)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                Log.d("Dodanie wiadomosci", "ID wiadomosci: " + documentReference.getId());
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                Log.w("Błąd", "Nie dodało wiadomości", e);
-                Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                }
-            });
+        String time = timestampToSeconds(Timestamp.now().toString());
+        db.collection("messages").document(time)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Dodanie", "Wysłano wiadomość do bazy!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Dodanie", "Błąd wysyłania", e);
+                        Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
+
     public void getMessageFromDb(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("messages")
@@ -126,21 +128,27 @@ public class Chat extends AppCompatActivity {
     }
 
     public String filteringTimestamp(String timestamp){
-        String [] time = timestamp.split(",");
-        time = time[0].split("=");
+        String time = timestampToSeconds(timestamp);
 
         Integer houer = 0;
         Integer minuts = 0;
         Integer seconds = 0;
-        Integer temp_time = Integer.valueOf(time[1]);
+        Integer temp_time = Integer.valueOf(time);
 
-        temp_time = Integer.valueOf(time[1]) - (Integer.valueOf(time[1])/3600/24)*24*3600;
+        temp_time = Integer.valueOf(time) - (Integer.valueOf(time)/3600/24)*24*3600;
         houer = temp_time/3600; //14
         minuts = (temp_time - (houer*3600))/60;
         seconds = temp_time - (houer*3600) - (minuts*60);
         houer++;
         return round_time(houer)+":"+round_time(minuts)+":"+round_time(seconds);
     }
+
+    public String timestampToSeconds(String timestamp){
+        String [] time = timestamp.split(",");
+        time = time[0].split("=");
+        return time[1];
+    }
+
 
     public String round_time(Integer number) {
         if(number<10){
