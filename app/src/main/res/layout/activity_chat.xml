@@ -27,14 +27,27 @@
             android:background="?android:attr/listDivider" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_below="@+id/infoBar"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="42dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:layout_below="@+id/infoBar"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/inputBar"
