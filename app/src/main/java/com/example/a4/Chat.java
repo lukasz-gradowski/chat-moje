@@ -40,18 +40,21 @@ public class Chat extends AppCompatActivity {
         sendMessages.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                newMessage();
+                sendMessage();
             }
         });
     }
 
-    public void newMessage() {
-        LinearLayout content = findViewById(R.id.content);
+    public void sendMessage() {
         EditText textMessage = findViewById(R.id.textMessage);
-        TextView messages = new TextView(this);
-        messages.setText(textMessage.getText().toString());
         String messToDb = textMessage.getText().toString();
         sendMessageToDb(getUsername(), messToDb);
+    }
+
+    public void createViewMessage(String msg){
+        LinearLayout content = findViewById(R.id.content);
+        TextView messages = new TextView(this);
+        messages.setText(msg);
         content.addView(messages);
         Log.d("widok", messages.toString());
     }
@@ -102,6 +105,7 @@ public void getMessageFromDb(){
                             case ADDED:
                                 Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                 Log.d("TAG", "New Msg: " + dc.getDocument().getData().get("text").toString());
+                                createViewMessage(dc.getDocument().getData().get("text").toString());
                                 break;
                             case MODIFIED:
                                 Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
