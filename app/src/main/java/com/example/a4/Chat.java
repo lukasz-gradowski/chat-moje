@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -54,7 +55,7 @@ public class Chat extends AppCompatActivity {
     public void createViewMessage(String msg){
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
-        messages.setText(msg);
+        messages.setText(Html.fromHtml(msg));
         content.addView(messages);
         Log.d("widok", messages.toString());
     }
@@ -106,7 +107,7 @@ public void getMessageFromDb(){
                                 Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                 String txt = dc.getDocument().getData().get("text").toString();
                                 String login = dc.getDocument().getData().get("login").toString();
-                                String toSend = "<"+login+">: "+txt;
+                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt;
                                 createViewMessage(toSend);
                                 break;
                             case MODIFIED:
