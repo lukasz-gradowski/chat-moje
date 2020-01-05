@@ -24,6 +24,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,60 +72,78 @@ public class Chat extends AppCompatActivity {
         return username;
     }
 
-public void sendMessageToDb(String log, String messToDb) {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Map<String, Object> data = new HashMap<>();
-    data.put("login", log);
-    data.put("text", messToDb);
-    data.put("time", Timestamp.now());
-    db.collection("messages")
+    public void sendMessageToDb(String log, String messToDb) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("login", log);
+        data.put("text", messToDb);
+        data.put("time", Timestamp.now());
+        db.collection("messages")
             .add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
-                    Log.d("Dodanie wiadomosci", "ID wiadomosci: " + documentReference.getId());
+                Log.d("Dodanie wiadomosci", "ID wiadomosci: " + documentReference.getId());
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.w("Błąd", "Nie dodało wiadomości", e);
-                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                Log.w("Błąd", "Nie dodało wiadomości", e);
+                Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
                 }
             });
-}
-public void getMessageFromDb(){
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    db.collection("messages")
+    }
+    public void getMessageFromDb(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("messages")
             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot snapshots,
                                     @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w("TAG", "listen:error", e);
-                        return;
-                    }
+                if (e != null) {
+                    Log.w("TAG", "listen:error", e);
+                    return;
+                }
 
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        switch (dc.getType()) {
-                            case ADDED:
-                                Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                                String txt = dc.getDocument().getData().get("text").toString();
-                                String login = dc.getDocument().getData().get("login").toString();
-                                String time = dc.getDocument().getData().get("time").toString();
-                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
-                                createViewMessage(toSend);
-                                break;
-                            case MODIFIED:
-                                Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                            case REMOVED:
-                                Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                        }
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                            String txt = dc.getDocument().getData().get("text").toString();
+                            String login = dc.getDocument().getData().get("login").toString();
+                            String time = dc.getDocument().getData().get("time").toString();
+                            time = filteringTimestamp(time);
+                            String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
+                            createViewMessage(toSend);
+                            break;
+                        case MODIFIED:
+                            Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                            break;
+                        case REMOVED:
+                            Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                            break;
                     }
+                }
 
                 }
             });
-}
+    }
+
+    public String filteringTimestamp(String timestamp){
+        String [] time = timestamp.split(",");
+        time = time[0].split("=");
+
+        Integer houer = 0;
+        Integer minuts = 0;
+        Integer seconds = 0;
+        Integer temp_time = Integer.valueOf(time[1]);
+
+        temp_time = Integer.valueOf(time[1]) - (Integer.valueOf(time[1])/3600/24)*24*3600;
+        houer = temp_time/3600; //14
+        minuts = (temp_time - (houer*3600))/60;
+        seconds = temp_time - (houer*3600) - (minuts*60);
+        houer++;
+        return houer.toString()+":"+minuts.toString()+":"+seconds.toString();
+    }
 }
