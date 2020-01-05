@@ -139,6 +139,17 @@ public class Chat extends AppCompatActivity {
         minuts = (temp_time - (houer*3600))/60;
         seconds = temp_time - (houer*3600) - (minuts*60);
         houer++;
-        return houer.toString()+":"+minuts.toString()+":"+seconds.toString();
+        return round_time(houer)+":"+round_time(minuts)+":"+round_time(seconds);
     }
+
+    public String round_time(Integer number) {
+        if(number<10){
+            return "0"+number.toString();
+        }else{
+            return number.toString();
+        }
+    }
+
+
 }
+
