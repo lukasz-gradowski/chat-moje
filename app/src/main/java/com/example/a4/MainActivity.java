@@ -108,4 +108,10 @@ public class MainActivity extends AppCompatActivity {
         txt = sharedPref.getString("login", "");
         login.setText(txt);
     }
+
+//    public static int getScreenHeight() {
+//        return Resources.getSystem().getDisplayMetrics().heightPixels;
+//    }
+//    sharedPref.getInt("height", getScreenHeight());
+//    String height = String.valueOf(getScreenHeight());
 }
