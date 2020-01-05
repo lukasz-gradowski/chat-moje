@@ -107,7 +107,8 @@ public void getMessageFromDb(){
                                 Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                 String txt = dc.getDocument().getData().get("text").toString();
                                 String login = dc.getDocument().getData().get("login").toString();
-                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt;
+                                String time = dc.getDocument().getData().get("time").toString();
+                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
                                 createViewMessage(toSend);
                                 break;
                             case MODIFIED:
