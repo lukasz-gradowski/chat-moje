@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -98,31 +97,30 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot snapshots,
                                     @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "listen:error", e);
-                    return;
-                }
-
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                            String txt = dc.getDocument().getData().get("text").toString();
-                            String login = dc.getDocument().getData().get("login").toString();
-                            String time = dc.getDocument().getData().get("time").toString();
-                            time = filteringTimestamp(time);
-                            String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
-                            createViewMessage(toSend);
-                            break;
-                        case MODIFIED:
-                            Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
-                            break;
-                        case REMOVED:
-                            Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
-                            break;
+                    if (e != null) {
+                        Log.w("TAG", "listen:error", e);
+                        return;
                     }
-                }
 
+                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                                String txt = dc.getDocument().getData().get("text").toString();
+                                String login = dc.getDocument().getData().get("login").toString();
+                                String time = dc.getDocument().getData().get("time").toString();
+                                time = filteringTimestamp(time);
+                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
+                                createViewMessage(toSend);
+                                break;
+                            case MODIFIED:
+                                Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                                break;
+                            case REMOVED:
+                                Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                                break;
+                        }
+                    }
                 }
             });
     }
@@ -148,7 +146,6 @@ public class Chat extends AppCompatActivity {
         time = time[0].split("=");
         return time[1];
     }
-
 
     public String round_time(Integer number) {
         if(number<10){
