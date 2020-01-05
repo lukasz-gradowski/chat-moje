@@ -110,7 +110,7 @@ public class Chat extends AppCompatActivity {
                                 String login = dc.getDocument().getData().get("login").toString();
                                 String time = dc.getDocument().getData().get("time").toString();
                                 time = filteringTimestamp(time);
-                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" ||"+time;
+                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
                                 createViewMessage(toSend);
                                 break;
                             case MODIFIED:
