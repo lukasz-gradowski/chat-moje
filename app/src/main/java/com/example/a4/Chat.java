@@ -50,6 +50,7 @@ public class Chat extends AppCompatActivity {
         EditText textMessage = findViewById(R.id.textMessage);
         String messToDb = textMessage.getText().toString();
         sendMessageToDb(getUsername(), messToDb);
+        textMessage.setText("");
     }
 
     public void createViewMessage(String msg){
@@ -88,7 +89,6 @@ public void sendMessageToDb(String log, String messToDb) {
             });
 }
 
-
 public void getMessageFromDb(){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     db.collection("messages")
@@ -121,13 +121,5 @@ public void getMessageFromDb(){
 
                 }
             });
-
-
-
-
 }
-
-
-
-
 }
