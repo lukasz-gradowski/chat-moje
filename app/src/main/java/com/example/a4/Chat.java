@@ -104,8 +104,10 @@ public void getMessageFromDb(){
                         switch (dc.getType()) {
                             case ADDED:
                                 Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                                Log.d("TAG", "New Msg: " + dc.getDocument().getData().get("text").toString());
-                                createViewMessage(dc.getDocument().getData().get("text").toString());
+                                String txt = dc.getDocument().getData().get("text").toString();
+                                String login = dc.getDocument().getData().get("login").toString();
+                                String toSend = "<"+login+">: "+txt;
+                                createViewMessage(toSend);
                                 break;
                             case MODIFIED:
                                 Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
