@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,7 +24,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,6 +72,7 @@ public void sendMessageToDb(String log, String messToDb) {
     Map<String, Object> data = new HashMap<>();
     data.put("login", log);
     data.put("text", messToDb);
+    data.put("time", Timestamp.now());
     db.collection("messages")
             .add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -88,7 +89,6 @@ public void sendMessageToDb(String log, String messToDb) {
                 }
             });
 }
-
 public void getMessageFromDb(){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     db.collection("messages")
