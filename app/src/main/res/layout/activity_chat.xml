@@ -6,17 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".Chat">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="56dp"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="1.0" />
+
     <LinearLayout
         android:id="@+id/infoBar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/nick"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/your_nick" />
 
@@ -24,40 +69,45 @@
             android:id="@+id/nickDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:background="#00000000" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@id/guideline3">
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/infoBar"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="0dp"
             android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             app:layout_constraintTop_toTopOf="parent" />
 
     </ScrollView>
 
     <LinearLayout
         android:id="@+id/inputBar"
-        android:layout_width="411dp"
-        android:layout_height="94dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/content"
-        android:layout_marginTop="640dp"
-        android:layout_y="600dp"
+        android:layout_y="0dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/guideline6"
+        app:layout_constraintEnd_toEndOf="@id/guideline8"
+        app:layout_constraintStart_toStartOf="@id/guideline7"
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        tools:ignore="MissingConstraints,NotSibling">
 
         <EditText
             android:id="@+id/textMessage"
