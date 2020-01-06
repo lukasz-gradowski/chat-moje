@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
@@ -33,14 +35,15 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getMessageFromDb();
-        TextView nick = findViewById(R.id.nick);
-        nick.setText("Twój nick to: "+getUsername());
+        final TextView nick = findViewById(R.id.nick);
+        titleBar(nick);
         ///->Widok
         final Button sendMessages = findViewById(R.id.sendMessage);
         sendMessages.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 sendMessage();
+                titleBar(nick);
             }
         });
     }
@@ -153,6 +156,18 @@ public class Chat extends AppCompatActivity {
         }else{
             return number.toString();
         }
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public void titleBar(TextView nick) {
+        String stan = isConnected() ? "</b><i> Połączono</i>" : " </b><i> Rozłączono</i>";
+        String msg = "Twój nick to: <b>" + getUsername() + stan;
+        nick.setText(Html.fromHtml(msg));
     }
 
 

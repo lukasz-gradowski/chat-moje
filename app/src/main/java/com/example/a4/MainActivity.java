@@ -50,11 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 final String password = haslo.getText().toString();
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //TODO is_online
-
-                ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-                if (isConnected) {
+                if (isConnected()) {
                     DocumentReference docRef = db.collection("users").document(log);
                     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -107,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("dane", Context.MODE_PRIVATE);
         txt = sharedPref.getString("login", "");
         login.setText(txt);
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 //    public static int getScreenHeight() {
