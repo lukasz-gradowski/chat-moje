@@ -4,8 +4,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId 'com.example.chat'
-        minSdkVersion 15
+        applicationId 'com.example.a4'
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -29,4 +29,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-inappmessaging:19.0.2'
+    implementation 'com.google.firebase:firebase-firestore:21.3.1'
+
+    implementation "org.mindrot:jbcrypt:0.4"
 }
+apply plugin: 'com.google.gms.google-services'

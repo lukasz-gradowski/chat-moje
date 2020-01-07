@@ -12,22 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Chat"></activity>
         <activity android:name=".RejestracjaActivity" />
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RegulaminActivity" />
-        <activity android:name=".WypActivity" />
-        <activity
-            android:name=".wyp"
-            android:label="@string/title_activity_wyp"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.a4.MainActivity" />
-        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
