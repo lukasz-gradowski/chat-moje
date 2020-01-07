@@ -50,9 +50,11 @@ public class Chat extends AppCompatActivity {
 
     public void sendMessage() {
         EditText textMessage = findViewById(R.id.textMessage);
-        String messToDb = textMessage.getText().toString();
-        sendMessageToDb(getUsername(), messToDb);
-        textMessage.setText("");
+        if(textMessage.getText().toString().length() > 0) {
+            String messToDb = textMessage.getText().toString();
+            sendMessageToDb(getUsername(), messToDb);
+            textMessage.setText("");
+        }
     }
 
     public void createViewMessage(String msg){
