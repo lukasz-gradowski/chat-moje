@@ -108,36 +108,32 @@ public class Chat extends AppCompatActivity {
     public void getMessageFromDb(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("messages")
-            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot snapshots,
-                                    @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "listen:error", e);
-                    return;
-                }
+            .addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.w("TAG", "listen:error", e);
+                return;
+            }
 
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                            String txt = dc.getDocument().getData().get("text").toString();
-                            String login = dc.getDocument().getData().get("login").toString();
-                            String time = dc.getDocument().getData().get("time").toString();
-                            time = filteringTimestamp(time);
-                            String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
-                            createViewMessage(toSend);
-                            break;
-                        case MODIFIED:
-                            Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
-                            break;
-                        case REMOVED:
-                            Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
-                            break;
-                    }
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                switch (dc.getType()) {
+                    case ADDED:
+                        Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                        String txt = dc.getDocument().getData().get("text").toString();
+                        String login = dc.getDocument().getData().get("login").toString();
+                        String time = dc.getDocument().getData().get("time").toString();
+                        time = filteringTimestamp(time);
+                        String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
+                        createViewMessage(toSend);
+                        break;
+                    case MODIFIED:
+                        Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                        break;
+                    case REMOVED:
+                        Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                        break;
                 }
-                }
-            });
+            }
+        });
     }
 
     public void clearChatContent(){
