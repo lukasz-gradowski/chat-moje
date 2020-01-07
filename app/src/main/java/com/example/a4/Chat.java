@@ -27,8 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class Chat extends AppCompatActivity {
+    private Vector<TextView> chatItems = new Vector();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +44,22 @@ public class Chat extends AppCompatActivity {
         sendMessages.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                sendMessage();
-                titleBar(nick);
+            sendMessage();
+            titleBar(nick);
             }
         });
     }
 
     public void sendMessage() {
         EditText textMessage = findViewById(R.id.textMessage);
-        if(textMessage.getText().toString().length() > 0) {
-            String messToDb = textMessage.getText().toString();
-            sendMessageToDb(getUsername(), messToDb);
+        String msg = textMessage.getText().toString();
+        if(msg.length() > 0) {
+            switch(msg){
+                case ".clear": clearChatContent(); break;
+                case ".logout": sendMessageToDb(getUsername(), "Wylogował się"); break;
+                case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
+                default: sendMessageToDb(getUsername(), msg);
+            }
             textMessage.setText("");
         }
     }
@@ -60,6 +67,8 @@ public class Chat extends AppCompatActivity {
     public void createViewMessage(String msg){
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
+        chatItems.add(messages);
+        messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
         content.addView(messages);
         Log.d("widok", messages.toString());
@@ -78,21 +87,22 @@ public class Chat extends AppCompatActivity {
         data.put("text", messToDb);
         data.put("time", Timestamp.now());
         String time = timestampToSeconds(Timestamp.now().toString());
+
         db.collection("messages").document(time)
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Dodanie", "Wysłano wiadomość do bazy!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Dodanie", "Błąd wysyłania", e);
-                        Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                    }
-                });
+            .set(data)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("Dodanie", "Wysłano wiadomość do bazy!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("Dodanie", "Błąd wysyłania", e);
+                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                }
+            });
     }
 
     public void getMessageFromDb(){
@@ -102,32 +112,37 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot snapshots,
                                     @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w("TAG", "listen:error", e);
-                        return;
-                    }
+                if (e != null) {
+                    Log.w("TAG", "listen:error", e);
+                    return;
+                }
 
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        switch (dc.getType()) {
-                            case ADDED:
-                                Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                                String txt = dc.getDocument().getData().get("text").toString();
-                                String login = dc.getDocument().getData().get("login").toString();
-                                String time = dc.getDocument().getData().get("time").toString();
-                                time = filteringTimestamp(time);
-                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
-                                createViewMessage(toSend);
-                                break;
-                            case MODIFIED:
-                                Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                            case REMOVED:
-                                Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                        }
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                            String txt = dc.getDocument().getData().get("text").toString();
+                            String login = dc.getDocument().getData().get("login").toString();
+                            String time = dc.getDocument().getData().get("time").toString();
+                            time = filteringTimestamp(time);
+                            String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
+                            createViewMessage(toSend);
+                            break;
+                        case MODIFIED:
+                            Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                            break;
+                        case REMOVED:
+                            Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                            break;
                     }
                 }
+                }
             });
+    }
+
+    public void clearChatContent(){
+        LinearLayout content = findViewById(R.id.content);
+        chatItems.forEach((n) -> content.removeView(n));
     }
 
     public String filteringTimestamp(String timestamp){
@@ -171,7 +186,5 @@ public class Chat extends AppCompatActivity {
         String msg = "Twój nick to: <b>" + getUsername() + stan;
         nick.setText(Html.fromHtml(msg));
     }
-
-
 }
 
