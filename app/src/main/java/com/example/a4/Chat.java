@@ -197,19 +197,13 @@ public class Chat extends AppCompatActivity {
         data.put("last_time_logout", Timestamp.now());
         db.collection("users").document(log)
                 .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Wylogowanie", log+"Wylogowal się");
-                        Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Wylogowanie", log+"Wylogowal się");
+                    Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Wylogowanie", "Błąd", e);
-                        Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Log.w("Wylogowanie", "Błąd", e);
+                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
                 });
         toMainActivity();
         sendMessageToDb(getUsername(), "Wylogował się");
