@@ -196,11 +196,12 @@ public class Chat extends AppCompatActivity {
         data.put("is_online", 0);
         data.put("last_time_logout", Timestamp.now());
         db.collection("users").document(log)
-                .set(data)
+                .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Wylogowanie", log+"Wylogowal się");
+                        Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
