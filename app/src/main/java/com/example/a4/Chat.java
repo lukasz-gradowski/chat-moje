@@ -3,6 +3,7 @@ package com.example.a4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -56,7 +57,7 @@ public class Chat extends AppCompatActivity {
         if(msg.length() > 0) {
             switch(msg){
                 case ".clear": clearChatContent(); break;
-                case ".logout": sendMessageToDb(getUsername(), "Wylogował się"); break;
+                case ".logout": logout(getUsername()); break;
                 case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
                 default: sendMessageToDb(getUsername(), msg);
             }
@@ -181,6 +182,36 @@ public class Chat extends AppCompatActivity {
         String stan = isConnected() ? "</b><i> Połączono</i>" : " </b><i> Rozłączono</i>";
         String msg = "Twój nick to: <b>" + getUsername() + stan;
         nick.setText(Html.fromHtml(msg));
+    }
+
+    public void toMainActivity() {
+        Intent intent;
+        intent = new Intent(Chat.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void logout(String log) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("is_online", 0);
+        data.put("last_time_logout", Timestamp.now());
+        db.collection("users").document(log)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Wylogowanie", log+"Wylogowal się");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Wylogowanie", "Błąd", e);
+                        Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                    }
+                });
+        toMainActivity();
+        sendMessageToDb(getUsername(), "Wylogował się");
     }
 }
 
