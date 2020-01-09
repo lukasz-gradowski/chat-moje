@@ -1,6 +1,5 @@
 package com.example.a4;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,21 +10,14 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -42,12 +34,9 @@ public class Chat extends AppCompatActivity {
         titleBar(nick);
         ///->Widok
         final Button sendMessages = findViewById(R.id.sendMessage);
-        sendMessages.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-            sendMessage();
-            titleBar(nick);
-            }
+        sendMessages.setOnClickListener(v -> {
+        sendMessage();
+        titleBar(nick);
         });
     }
 
@@ -91,18 +80,10 @@ public class Chat extends AppCompatActivity {
 
         db.collection("messages").document(time)
             .set(data)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("Dodanie", "Wysłano wiadomość do bazy!");
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("Dodanie", "Błąd wysyłania", e);
-                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                }
+            .addOnSuccessListener(aVoid -> Log.d("Dodanie", "Wysłano wiadomość do bazy!"))
+            .addOnFailureListener(e -> {
+                Log.w("Dodanie", "Błąd wysyłania", e);
+                Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
             });
     }
 
