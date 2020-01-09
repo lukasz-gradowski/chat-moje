@@ -136,15 +136,12 @@ public class Chat extends AppCompatActivity {
     public String filteringTimestamp(String timestamp){
         String time = timestampToSeconds(timestamp);
 
-        Integer houer = 0;
-        Integer minuts = 0;
-        Integer seconds = 0;
         Integer temp_time = Integer.valueOf(time);
 
         temp_time = Integer.valueOf(time) - (Integer.valueOf(time)/3600/24)*24*3600;
-        houer = temp_time/3600; //14
-        minuts = (temp_time - (houer*3600))/60;
-        seconds = temp_time - (houer*3600) - (minuts*60);
+        Integer houer = temp_time/3600; //14
+        Integer minuts = (temp_time - (houer*3600))/60;
+        Integer seconds = temp_time - (houer*3600) - (minuts*60);
         houer++;
         return round_time(houer)+":"+round_time(minuts)+":"+round_time(seconds);
     }
