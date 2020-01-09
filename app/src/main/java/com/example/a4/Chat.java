@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Chat extends AppCompatActivity {
     private Vector<TextView> chatItems = new Vector();
@@ -35,8 +36,8 @@ public class Chat extends AppCompatActivity {
         ///->Widok
         final Button sendMessages = findViewById(R.id.sendMessage);
         sendMessages.setOnClickListener(v -> {
-        sendMessage();
-        titleBar(nick);
+            sendMessage();
+            titleBar(nick);
         });
     }
 
@@ -45,10 +46,15 @@ public class Chat extends AppCompatActivity {
         String msg = textMessage.getText().toString();
         if(msg.length() > 0) {
             switch(msg){
-                case ".clear": clearChatContent(); break;
+                case ".clear": clearChatContent(0); break;
                 case ".logout": logout(getUsername()); break;
                 case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
-                default: sendMessageToDb(getUsername(), msg);
+                default: {
+                    if (msg.matches("(.clear )\\d+"))
+                        clearChatContent(Integer.valueOf(msg.substring(msg.lastIndexOf(" ") + 1)));
+                    else
+                        sendMessageToDb(getUsername(), msg);
+                }
             }
             textMessage.setText("");
         }
@@ -118,9 +124,13 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    public void clearChatContent(){
+    public void clearChatContent(int last){
+        AtomicInteger i= new AtomicInteger();
         LinearLayout content = findViewById(R.id.content);
-        chatItems.forEach((n) -> content.removeView(n));
+        chatItems.forEach((n) -> {
+            if(i.incrementAndGet() <= (chatItems.size()-last))
+                content.removeView(n);
+        });
     }
 
     public String filteringTimestamp(String timestamp){
@@ -146,11 +156,8 @@ public class Chat extends AppCompatActivity {
     }
 
     public String round_time(Integer number) {
-        if(number<10){
-            return "0"+number.toString();
-        }else{
-            return number.toString();
-        }
+        if(number<10)   return "0"+number.toString();
+        else            return number.toString();
     }
 
     public boolean isConnected() {
