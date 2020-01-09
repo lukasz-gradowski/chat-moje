@@ -20,15 +20,13 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Chat extends AppCompatActivity {
     private Vector<TextView> chatItems = new Vector();
@@ -56,10 +54,15 @@ public class Chat extends AppCompatActivity {
         String msg = textMessage.getText().toString();
         if(msg.length() > 0) {
             switch(msg){
-                case ".clear": clearChatContent(); break;
+                case ".clear": clearChatContent(0); break;
                 case ".logout": logout(getUsername()); break;
                 case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
-                default: sendMessageToDb(getUsername(), msg);
+                default: {
+                    if (msg.matches("(.clear )\\d+"))
+                        clearChatContent(Integer.valueOf(msg.substring(msg.lastIndexOf(" ") + 1)));
+                    else
+                        sendMessageToDb(getUsername(), msg);
+                }
             }
             textMessage.setText("");
         }
@@ -137,9 +140,13 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    public void clearChatContent(){
+    public void clearChatContent(int last){
+        AtomicInteger i= new AtomicInteger();
         LinearLayout content = findViewById(R.id.content);
-        chatItems.forEach((n) -> content.removeView(n));
+        chatItems.forEach((n) -> {
+            if(i.incrementAndGet() <= (chatItems.size()-last))
+                content.removeView(n);
+        });
     }
 
     public String filteringTimestamp(String timestamp){
