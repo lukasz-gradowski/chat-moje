@@ -3,6 +3,7 @@ package com.example.a4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -56,7 +57,7 @@ public class Chat extends AppCompatActivity {
         if(msg.length() > 0) {
             switch(msg){
                 case ".clear": clearChatContent(); break;
-                case ".logout": sendMessageToDb(getUsername(), "Wylogował się"); break;
+                case ".logout": logout(getUsername()); break;
                 case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
                 default: sendMessageToDb(getUsername(), msg);
             }
@@ -108,36 +109,32 @@ public class Chat extends AppCompatActivity {
     public void getMessageFromDb(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("messages")
-            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot snapshots,
-                                    @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w("TAG", "listen:error", e);
-                        return;
-                    }
+            .addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.w("TAG", "listen:error", e);
+                return;
+            }
 
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        switch (dc.getType()) {
-                            case ADDED:
-                                Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                                String txt = dc.getDocument().getData().get("text").toString();
-                                String login = dc.getDocument().getData().get("login").toString();
-                                String time = dc.getDocument().getData().get("time").toString();
-                                time = filteringTimestamp(time);
-                                String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
-                                createViewMessage(toSend);
-                                break;
-                            case MODIFIED:
-                                Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                            case REMOVED:
-                                Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
-                                break;
-                        }
-                    }
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                switch (dc.getType()) {
+                    case ADDED:
+                        Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                        String txt = dc.getDocument().getData().get("text").toString();
+                        String login = dc.getDocument().getData().get("login").toString();
+                        String time = dc.getDocument().getData().get("time").toString();
+                        time = filteringTimestamp(time);
+                        String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
+                        createViewMessage(toSend);
+                        break;
+                    case MODIFIED:
+                        Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                        break;
+                    case REMOVED:
+                        Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                        break;
                 }
-            });
+            }
+        });
     }
 
     public void clearChatContent(){
@@ -182,6 +179,31 @@ public class Chat extends AppCompatActivity {
         String stan = isConnected() ? "</b><i> Połączono</i>" : " </b><i> Rozłączono</i>";
         String msg = "Twój nick to: <b>" + getUsername() + stan;
         nick.setText(Html.fromHtml(msg));
+    }
+
+    public void toMainActivity() {
+        Intent intent;
+        intent = new Intent(Chat.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void logout(String log) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("is_online", 0);
+        data.put("last_time_logout", Timestamp.now());
+        db.collection("users").document(log)
+                .update(data)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Wylogowanie", log+"Wylogowal się");
+                    Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Wylogowanie", "Błąd", e);
+                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                });
+        toMainActivity();
+        sendMessageToDb(getUsername(), "Wylogował się");
     }
 }
 
