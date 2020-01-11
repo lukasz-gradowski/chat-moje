@@ -213,19 +213,23 @@ public class Chat extends AppCompatActivity {
     }
 
     public void delete_messages(Integer quantity) {
+        LinearLayout content = findViewById(R.id.content);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("messages").orderBy("time", Query.Direction.DESCENDING).limit(quantity)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("Document_id", document.getId() + " => " + document.getData());
-                            delete_message(document.getId(), db);
-                        }
-                    } else {
-                        Log.e("ERROR", "Error getting documents: ", task.getException());
+        db.collection("messages").orderBy("time", Query.Direction.ASCENDING).limit(quantity)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    int i = 0;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("Document_id", document.getId() + " => " + document.getData());
+                        delete_message(document.getId(), db);
+                        content.removeView(chatItems.elementAt(i++));
                     }
-                });
+                } else {
+                    Log.e("ERROR", "Error getting documents: ", task.getException());
+                }
+            });
     }
 
 }
