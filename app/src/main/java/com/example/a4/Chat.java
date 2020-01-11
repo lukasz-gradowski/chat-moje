@@ -179,18 +179,18 @@ public class Chat extends AppCompatActivity {
     public void logout(String log) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
-        data.put("is_online", 0);
+        data.put("is_online", false);
         data.put("last_time_logout", Timestamp.now());
         db.collection("users").document(log)
-                .update(data)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("Wylogowanie", log+"Wylogowal się");
-                    Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
-                })
-                .addOnFailureListener(e -> {
-                    Log.w("Wylogowanie", "Błąd", e);
-                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                });
+            .update(data)
+            .addOnSuccessListener(aVoid -> {
+                Log.d("Wylogowanie", log+"Wylogowal się");
+                Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
+            })
+            .addOnFailureListener(e -> {
+                Log.w("Wylogowanie", "Błąd", e);
+                Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+            });
         toMainActivity();
         sendMessageToDb(getUsername(), "Wylogował się");
     }
