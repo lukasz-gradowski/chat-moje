@@ -72,8 +72,7 @@ public class Chat extends AppCompatActivity {
 
     public String getUsername() {
         SharedPreferences sharedPref = getSharedPreferences("dane", Context.MODE_PRIVATE);
-        String username = sharedPref.getString("login", "");
-        return username;
+        return sharedPref.getString("login", "");
     }
 
     public void sendMessageToDb(String log, String messToDb) {
