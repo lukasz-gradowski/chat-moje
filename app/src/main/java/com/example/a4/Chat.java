@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -101,13 +102,14 @@ public class Chat extends AppCompatActivity {
                 return;
             }
 
-            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                assert snapshots != null;
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
                 switch (dc.getType()) {
                     case ADDED:
                         Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                        String txt = dc.getDocument().getData().get("text").toString();
-                        String login = dc.getDocument().getData().get("login").toString();
-                        String time = dc.getDocument().getData().get("time").toString();
+                        String txt = Objects.requireNonNull(dc.getDocument().getData().get("text")).toString();
+                        String login = Objects.requireNonNull(dc.getDocument().getData().get("login")).toString();
+                        String time = Objects.requireNonNull(dc.getDocument().getData().get("time")).toString();
                         time = filteringTimestamp(time);
                         String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
                         createViewMessage(toSend);
