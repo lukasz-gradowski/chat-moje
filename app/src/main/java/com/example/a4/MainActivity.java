@@ -106,9 +106,7 @@ public class MainActivity extends AppCompatActivity {
         data.put("last_time_login", Timestamp.now());
         db.collection("users").document(log)
                 .update(data)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("Zalogowanie", log+"Zalogował sie");
-                })
+                .addOnSuccessListener(aVoid -> Log.d("Zalogowanie", log+"Zalogował sie"))
                 .addOnFailureListener(e -> {
                     Log.w("Zalogowanie", "Błąd", e);
                     Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
