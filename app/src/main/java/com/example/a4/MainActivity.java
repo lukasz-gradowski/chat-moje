@@ -131,12 +131,12 @@ public class MainActivity extends AppCompatActivity {
         data.put("is_online", true);
         data.put("last_time_login", Timestamp.now());
         db.collection("users").document(log)
-                .update(data)
-                .addOnSuccessListener(aVoid -> Log.d("Zalogowanie", log+"Zalogował sie"))
-                .addOnFailureListener(e -> {
-                    Log.w("Zalogowanie", "Błąd", e);
-                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
-                });
+            .update(data)
+            .addOnSuccessListener(aVoid -> Log.d("Zalogowanie", log+"Zalogował sie"))
+            .addOnFailureListener(e -> {
+                Log.w("Zalogowanie", "Błąd", e);
+                Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+            });
         toChat();
     }
 
@@ -154,13 +154,12 @@ public class MainActivity extends AppCompatActivity {
             docRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    String isOnline = document.getData().get("is_online").toString();
-                    if (document.exists() && isOnline == "true"){
+                    if (document.exists() && "true" == document.getData().get("is_online").toString()){
                         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED && sharedIMEI.equals(getDeviceIMEI())){
                             switchToChat(username);
                         } else
                             Toast.makeText(getApplicationContext(), "Brak uprawnień do autologowania", Toast.LENGTH_LONG).show();
-                    };
+                    }
                 }
             });
         } else {
