@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -45,10 +48,17 @@ public class Chat extends AppCompatActivity {
     public void sendMessage() {
         EditText textMessage = findViewById(R.id.textMessage);
         String msg = textMessage.getText().toString();
+        String[] split = msg.split(" ");
         if(msg.length() > 0) {
-            switch(msg){
+            switch(split[0]){
                 case ".clear": clearChatContent(0); break;
                 case ".logout": logout(getUsername()); break;
+                case ".delete":
+                    if(split.length > 1 && split[1].matches("[0-9]+")) {
+                        delete_messages(Integer.parseInt(split[1]));
+                    }
+                    else sendMessageToDb(getUsername(), msg);
+                 break;
                 case ".exit": sendMessageToDb(getUsername(), "Opuścił czat"); break;
                 default: {
                     if (msg.matches("(.clear )\\d+"))
@@ -194,5 +204,29 @@ public class Chat extends AppCompatActivity {
         toMainActivity();
         sendMessageToDb(getUsername(), "Wylogował się");
     }
+
+    public void delete_message(String id, FirebaseFirestore db){
+        db.collection("messages").document(id)
+                .delete()
+                .addOnSuccessListener (aVoid -> Log.d("Kasowanie", "DocumentSnapshot successfully deleted!"))
+                .addOnFailureListener (e ->  Log.w("Kasowanie", "Error deleting document", e));
+    }
+
+    public void delete_messages(Integer quantity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("messages").orderBy("time", Query.Direction.DESCENDING).limit(quantity)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Document_id", document.getId() + " => " + document.getData());
+                            delete_message(document.getId(), db);
+                        }
+                    } else {
+                        Log.e("ERROR", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
 }
 
