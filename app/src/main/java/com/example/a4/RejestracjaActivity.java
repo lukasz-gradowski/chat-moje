@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -103,7 +102,7 @@ public class RejestracjaActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPref = getSharedPreferences("dane", Context.MODE_PRIVATE);
-        String txt = sharedPref.getString("login", "");
-        login.setText(txt);
+        String sharedLogin = sharedPref.getString("login", "");
+        login.setText(sharedLogin);
     }
 }
