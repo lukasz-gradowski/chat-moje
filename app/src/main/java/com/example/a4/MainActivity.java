@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import org.mindrot.jbcrypt.BCrypt;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Button zaloguj, zarejestruj;
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
             String log = login.getText().toString();
             final String password = haslo.getText().toString();
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            //TODO is_online
             if (isConnected()) {
                 DocumentReference docRef = db.collection("users").document(log);
                 docRef.get().addOnCompleteListener(task -> {
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             if (!BCrypt.checkpw(password, password_db)) {
                                 Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_LONG).show();
                             } else {
-                                toChat();
+                                is_online(log);
                             }
                         } else {
                             //Log.d("Nie znaleziono usera", "No such document");
@@ -97,4 +98,23 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
+    public void is_online(String log) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("is_online", 1);
+        data.put("last_time_login", Timestamp.now());
+        db.collection("users").document(log)
+                .update(data)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Zalogowanie", log+"Zalogował sie");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Zalogowanie", "Błąd", e);
+                    Toast.makeText(getApplicationContext(), "Błąd", Toast.LENGTH_LONG).show();
+                });
+        toChat();;
+    }
+
+
 }
