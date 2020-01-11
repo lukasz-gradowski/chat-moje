@@ -10,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,6 +78,7 @@ public class RejestracjaActivity extends AppCompatActivity {
         //user.put("login", log);
         user.put("password", password);
         user.put("is_online", true);
+        user.put("last_time_login", Timestamp.now());
 
         db.collection("users").document(log)
             .set(user)
