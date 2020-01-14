@@ -52,8 +52,8 @@ public class Chat extends AppCompatActivity {
         if(msg.length() > 0) {
             switch(split[0]){
                 case ".clear": clearChatContent(0); break;
-                case ".logout": logout(getUsername()); break;
-                case ".spy": spy(getUsername()); break;
+                case ".logout": logout(); break;
+                case ".spy": spy(); break;
                 case ".users": users_online(); break;
                 case ".delete":
                     if(split.length > 1 && split[1].matches("[0-9]+")) {
@@ -186,15 +186,15 @@ public class Chat extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logout(String log) {
+    public void logout() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("is_online", false);
         data.put("last_time_logout", Timestamp.now());
-        db.collection("users").document(log)
+        db.collection("users").document(getUsername())
             .update(data)
             .addOnSuccessListener(aVoid -> {
-                Log.d("Wylogowanie", log+"Wylogowal się");
+                Log.d("Wylogowanie", getUsername()+"Wylogowal się");
                 Toast.makeText(getApplicationContext(), "Wylogowałeś się ! Zapraszamy ponownie!", Toast.LENGTH_LONG).show();
             })
             .addOnFailureListener(e -> {
@@ -214,7 +214,6 @@ public class Chat extends AppCompatActivity {
 
     public void delete_messages(Integer quantity) {
         LinearLayout content = findViewById(R.id.content);
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("messages").orderBy("time", Query.Direction.ASCENDING).limit(quantity)
             .get()
@@ -253,16 +252,15 @@ public class Chat extends AppCompatActivity {
                 });
     }
 
-    public void spy(String log) {
+    public void spy() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("spy", true);
-        db.collection("users").document(log)
+        db.collection("users").document(getUsername())
                 .update(data)
                 .addOnSuccessListener(aVoid -> Log.d("SPY", "Wysłano wiadomość do bazy!"))
                 .addOnFailureListener(e -> Log.w("SPY", "Błąd wysyłania", e));
                 Toast.makeText(getApplicationContext(), "Jesteś Agentem :P", Toast.LENGTH_LONG).show();
     }
-
 }
 
