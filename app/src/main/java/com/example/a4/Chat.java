@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -262,5 +263,19 @@ public class Chat extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w("SPY", "Błąd wysyłania", e));
                 Toast.makeText(getApplicationContext(), "Jesteś Agentem :P", Toast.LENGTH_LONG).show();
     }
+
+//    public boolean spy_status() {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("messages").document(getUsername())
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot document = task.getResult();
+//                        //Objects.requireNonNull(document.getData().get("spy")).toString();
+//                    } else {
+//                        Log.e("ERROR", "Error getting documents: ", task.getException());
+//                    }
+//                });
+//    }
 }
 
