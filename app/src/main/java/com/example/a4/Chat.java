@@ -53,6 +53,8 @@ public class Chat extends AppCompatActivity {
             switch(split[0]){
                 case ".clear": clearChatContent(0); break;
                 case ".logout": logout(getUsername()); break;
+                case ".spy": spy(getUsername()); break;
+                case ".users": users_online(); break;
                 case ".delete":
                     if(split.length > 1 && split[1].matches("[0-9]+")) {
                         delete_messages(Integer.parseInt(split[1]));
@@ -228,6 +230,38 @@ public class Chat extends AppCompatActivity {
                     Log.e("ERROR", "Error getting documents: ", task.getException());
                 }
             });
+    }
+
+    public void users_online() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").whereEqualTo("spy", false)
+                .get()
+                .addOnCompleteListener(task -> {
+                    String users = new String();
+                    int i = 0;
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Document_id", document.getId() + " => " + document.getData());
+                            users += " <i>" + document.getId() +"<i>";
+                            i++;
+                        }
+                    } else {
+                        Log.e("ERROR", "Error getting documents: ", task.getException());
+                    }
+                    users += " Zalogowanych: "+i;
+                    sendMessageToDb("Users_Online:", users);
+                });
+    }
+
+    public void spy(String log) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("spy", true);
+        db.collection("users").document(log)
+                .update(data)
+                .addOnSuccessListener(aVoid -> Log.d("SPY", "Wysłano wiadomość do bazy!"))
+                .addOnFailureListener(e -> Log.w("SPY", "Błąd wysyłania", e));
+                Toast.makeText(getApplicationContext(), "Jesteś Agentem :P", Toast.LENGTH_LONG).show();
     }
 
 }
