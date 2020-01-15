@@ -115,8 +115,8 @@ public class Chat extends AppCompatActivity {
                 return;
             }
 
-                assert snapshots != null;
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+            assert snapshots != null;
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
                 switch (dc.getType()) {
                     case ADDED:
                         Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
@@ -208,9 +208,9 @@ public class Chat extends AppCompatActivity {
 
     public void delete_message(String id, FirebaseFirestore db){
         db.collection("messages").document(id)
-                .delete()
-                .addOnSuccessListener (aVoid -> Log.d("Kasowanie", "DocumentSnapshot successfully deleted!"))
-                .addOnFailureListener (e ->  Log.w("Kasowanie", "Error deleting document", e));
+            .delete()
+            .addOnSuccessListener (aVoid -> Log.d("Kasowanie", "DocumentSnapshot successfully deleted!"))
+            .addOnFailureListener (e ->  Log.w("Kasowanie", "Error deleting document", e));
     }
 
     public void delete_messages(Integer quantity) {
@@ -235,47 +235,49 @@ public class Chat extends AppCompatActivity {
     public void users_online() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").whereEqualTo("spy", false)
-                .get()
-                .addOnCompleteListener(task -> {
-                    String users = new String();
-                    int i = 0;
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("Document_id", document.getId() + " => " + document.getData());
-                            users += " <i>" + document.getId() +"<i>";
-                            i++;
-                        }
-                    } else {
-                        Log.e("ERROR", "Error getting documents: ", task.getException());
+            .get()
+            .addOnCompleteListener(task -> {
+                String users = new String();
+                int i = 0;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("Document_id", document.getId() + " => " + document.getData());
+                        users += " <i>" + document.getId() +"<i>";
+                        i++;
                     }
-                    users += " Zalogowanych: "+i;
-                    sendMessageToDb("Users_Online:", users);
-                });
+                } else {
+                    Log.e("ERROR", "Error getting documents: ", task.getException());
+                }
+                users += " Zalogowanych: "+i;
+                sendMessageToDb("Users_Online:", users);
+            });
+    }
+
+    public void changeSpy(boolean status) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("spy", status);
+        db.collection("users").document(getUsername())
+            .update(data)
+            .addOnSuccessListener(aVoid -> Log.d("SPY", "Wysłano wiadomość do bazy!"))
+            .addOnFailureListener(e -> Log.w("SPY", "Błąd wysyłania", e));
+            Toast.makeText(getApplicationContext(), "Jesteś Agentem :P", Toast.LENGTH_LONG).show();
     }
 
     public void spy() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> data = new HashMap<>();
-        data.put("spy", true);
         db.collection("users").document(getUsername())
-                .update(data)
-                .addOnSuccessListener(aVoid -> Log.d("SPY", "Wysłano wiadomość do bazy!"))
-                .addOnFailureListener(e -> Log.w("SPY", "Błąd wysyłania", e));
-                Toast.makeText(getApplicationContext(), "Jesteś Agentem :P", Toast.LENGTH_LONG).show();
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    boolean status = document.getBoolean("spy");
+                    changeSpy(!status);
+                    Toast.makeText(getApplicationContext(), "Tryb śledzenia: "+!status, Toast.LENGTH_LONG).show();
+                    Log.d("SPY", "Setting spy: "+ status);
+                } else {
+                    Log.e("ERROR", "Error getting documents: ", task.getException());
+                }
+            });
     }
-
-//    public boolean spy_status() {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("messages").document(getUsername())
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        //Objects.requireNonNull(document.getData().get("spy")).toString();
-//                    } else {
-//                        Log.e("ERROR", "Error getting documents: ", task.getException());
-//                    }
-//                });
-//    }
 }
-
