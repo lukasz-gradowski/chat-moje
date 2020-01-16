@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,11 +32,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
-//<com.google.android.material.floatingactionbutton.FloatingActionButton
 
 public class Chat extends AppCompatActivity {
     private Vector<TextView> chatItems = new Vector();
-    Button button;
+    FloatingActionButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,6 @@ public class Chat extends AppCompatActivity {
         });
         button = findViewById(R.id.floatingActionButton17);
         button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(Chat.this, button);
