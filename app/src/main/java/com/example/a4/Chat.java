@@ -21,15 +21,21 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+
+//<com.google.android.material.floatingactionbutton.FloatingActionButton
+
 public class Chat extends AppCompatActivity {
     private Vector<TextView> chatItems = new Vector();
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,24 @@ public class Chat extends AppCompatActivity {
         sendMessages.setOnClickListener(v -> {
             sendMessage();
             titleBar(nick);
+        });
+
+        button = findViewById(R.id.floatingActionButton17);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(Chat.this, button);
+                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(Chat.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+            }
         });
     }
 
