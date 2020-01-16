@@ -113,11 +113,13 @@
         android:layout_marginStart="350dp"
         android:layout_marginBottom="90dp"
         android:clickable="true"
+        app:backgroundTint="#0C640F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
         app:layout_constraintTop_toTopOf="@id/guideline9"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@android:drawable/ic_menu_add"
+        tools:srcCompat="@android:drawable/ic_input_add" />
 
     <LinearLayout
         android:id="@+id/inputBar"
