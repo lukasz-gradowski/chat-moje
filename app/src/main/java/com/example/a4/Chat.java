@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
-
 //<com.google.android.material.floatingactionbutton.FloatingActionButton
 
 public class Chat extends AppCompatActivity {
@@ -50,7 +49,6 @@ public class Chat extends AppCompatActivity {
             sendMessage();
             titleBar(nick);
         });
-
         button = findViewById(R.id.floatingActionButton17);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -64,7 +62,6 @@ public class Chat extends AppCompatActivity {
                         return true;
                     }
                 });
-
                 popup.show();//showing popup menu
             }
         });
