@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +110,8 @@ public class Chat extends AppCompatActivity {
         messages.setText(Html.fromHtml(msg));
         content.addView(messages);
         Log.d("widok", messages.toString());
+        ScrollView scroll = findViewById(R.id.contentScroll);
+        scroll.fullScroll(View.FOCUS_DOWN);
     }
 
     public String getUsername() {
