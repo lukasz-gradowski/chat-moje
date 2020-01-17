@@ -80,7 +80,7 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/scrollView4"
+        android:id="@+id/contentScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/guideline4"
@@ -103,18 +103,18 @@
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton17"
+        android:id="@+id/actionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="330dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="90dp"
         android:clickable="true"
         app:backgroundTint="#0C640F"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline8"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
         app:layout_constraintTop_toTopOf="@id/guideline9"
         app:srcCompat="@android:drawable/ic_menu_add"
