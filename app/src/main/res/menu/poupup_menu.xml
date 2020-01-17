@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/one"
-        android:title="One" />
+        android:id="@+id/popUsers"
+        android:title="Użytkownicy Online" />
     <item
-        android:id="@+id/two"
-        android:title="Two"/>
+        android:id="@+id/popSpy"
+        android:title="Tryb ukrycia" />
     <item
-        android:id="@+id/three"
-        android:title="Three"/>
+        android:id="@+id/popClear"
+        android:title="Wyczyść czat" />
+<!--    <item-->
+<!--        android:id="@+id/popDelete"-->
+<!--        android:title="Usuń wiadomości" />-->
+    <item
+        android:id="@+id/popLogout"
+        android:title="Wyloguj się" />
+    <item
+        android:id="@+id/popExit"
+        android:title="Wyjdź" />
 </menu>

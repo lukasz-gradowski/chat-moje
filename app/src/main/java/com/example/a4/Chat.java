@@ -50,7 +50,7 @@ public class Chat extends AppCompatActivity {
             sendMessage();
             titleBar(nick);
         });
-        button = findViewById(R.id.floatingActionButton17);
+        button = findViewById(R.id.actionButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,11 +58,17 @@ public class Chat extends AppCompatActivity {
                 popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(Chat.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        switch(item.toString()){
+                            case "Użytkownicy Online": users_online(); break;
+                            case "Tryb ukrycia": spy(); break;
+                            case "Wyczyść czat": clearChatContent(10); break;
+                            case "Wyloguj się": logout(); break;
+                            default: Toast.makeText(Chat.this, "Opcja: "+item.getTitle()+", narazie nie jest wspierana", Toast.LENGTH_SHORT).show();
+                        }
                         return true;
                     }
                 });
-                popup.show();//showing popup menu
+                popup.show();
             }
         });
     }
