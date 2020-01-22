@@ -78,6 +78,7 @@ public class RejestracjaActivity extends AppCompatActivity {
         user.put("password", password);
         user.put("is_online", true);
         user.put("last_time_login", Timestamp.now());
+        user.put("spy", false);
 
         db.collection("users").document(log)
             .set(user)
