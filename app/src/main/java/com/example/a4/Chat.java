@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -102,9 +104,15 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    public int getRandomColor(){
+        Random random = new Random();
+        return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+    }
+
     public void createViewMessage(String msg){
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
+        messages.setBackgroundColor(getRandomColor());
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
