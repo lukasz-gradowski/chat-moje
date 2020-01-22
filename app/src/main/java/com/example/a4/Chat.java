@@ -54,25 +54,20 @@ public class Chat extends AppCompatActivity {
             titleBar(nick);
         });
         button = findViewById(R.id.actionButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(Chat.this, button);
-                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch(item.toString()){
-                            case "Użytkownicy Online": users_online(); break;
-                            case "Tryb ukrycia": spy(); break;
-                            case "Wyczyść czat": clearChatContent(10); break;
-                            case "Wyloguj się": logout(); break;
-                            default: Toast.makeText(Chat.this, "Opcja: "+item.getTitle()+", narazie nie jest wspierana", Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                    }
-                });
-                popup.show();
-            }
+        button.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(Chat.this, button);
+            popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch(item.toString()){
+                    case "Użytkownicy Online": users_online(); break;
+                    case "Tryb ukrycia": spy(); break;
+                    case "Wyczyść czat": clearChatContent(10); break;
+                    case "Wyloguj się": logout(); break;
+                    default: Toast.makeText(Chat.this, "Opcja: "+item.getTitle()+", narazie nie jest wspierana", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            });
+            popup.show();
         });
     }
 
