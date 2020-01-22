@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,8 +32,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
@@ -108,6 +107,7 @@ public class Chat extends AppCompatActivity {
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
         messages.setBackgroundColor(getRandomColor());
+        //messages.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
