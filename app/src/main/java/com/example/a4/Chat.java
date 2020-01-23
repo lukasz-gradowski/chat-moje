@@ -107,7 +107,7 @@ public class Chat extends AppCompatActivity {
     public void customView(View v, int borderColor) {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
-        shape.setCornerRadii(new float[] { 8, 8, 8, 8, 8, 8, 8, 8 });
+        shape.setCornerRadii(new float[] { 12, 12, 12, 12, 12, 12, 12, 12 });
         shape.setColor(getRandomColor());
         shape.setStroke(3, borderColor);
         v.setBackground(shape);
@@ -119,9 +119,9 @@ public class Chat extends AppCompatActivity {
         //messages.setBackgroundColor(getRandomColor());
         LinearLayout.LayoutParams params;
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(5,4,0,0);
+        params.setMargins(6,4,6,0);
         messages.setLayoutParams(params);
-        messages.setPadding(0,12,0,0);
+        messages.setPadding(2,6,2,6);
         customView(messages, 111);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
