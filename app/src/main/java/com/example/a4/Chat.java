@@ -109,8 +109,9 @@ public class Chat extends AppCompatActivity {
         messages.setBackgroundColor(getRandomColor());
         LinearLayout.LayoutParams params;
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(5,5,5,5);
+        params.setMargins(5,4,0,0);
         messages.setLayoutParams(params);
+        messages.setPadding(0,8,0,0);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
