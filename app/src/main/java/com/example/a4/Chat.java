@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -103,15 +104,25 @@ public class Chat extends AppCompatActivity {
         return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
+    public void customView(View v, int borderColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[] { 8, 8, 8, 8, 8, 8, 8, 8 });
+        shape.setColor(getRandomColor());
+        shape.setStroke(3, borderColor);
+        v.setBackground(shape);
+    }
+
     public void createViewMessage(String msg){
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
-        messages.setBackgroundColor(getRandomColor());
+        //messages.setBackgroundColor(getRandomColor());
         LinearLayout.LayoutParams params;
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(5,4,0,0);
         messages.setLayoutParams(params);
-        messages.setPadding(0,8,0,0);
+        messages.setPadding(0,12,0,0);
+        customView(messages, 111);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
