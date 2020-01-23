@@ -107,7 +107,10 @@ public class Chat extends AppCompatActivity {
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
         messages.setBackgroundColor(getRandomColor());
-        messages.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams params;
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(5,5,5,5);
+        messages.setLayoutParams(params);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
