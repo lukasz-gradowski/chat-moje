@@ -36,8 +36,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 import android.view.View;
 import android.widget.PopupMenu;
 
+class User{
+    private String login;
+    private int color;
+
+    private int getRandomColor(){
+        Random random = new Random();
+        return Color.argb(128, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+    }
+
+    public User(String username){
+        this.login = username;
+        this.color = getRandomColor();
+    }
+
+    public int getColor(){
+        return color;
+    }
+}
+
 public class Chat extends AppCompatActivity {
     private Vector<TextView> chatItems = new Vector();
+    private Map<String, User> user = new HashMap<String, User>();
     FloatingActionButton button;
 
     @Override
@@ -99,21 +119,16 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-    public int getRandomColor(){
-        Random random = new Random();
-        return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-    }
-
-    public void customView(View v, int borderColor) {
+    public void customView(String login, View v, int borderColor){
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
-        shape.setCornerRadii(new float[] { 12, 12, 12, 12, 12, 12, 12, 12 });
-        shape.setColor(getRandomColor());
+        shape.setCornerRadii(new float[] { 40, 40, 40, 40, 40, 40, 40, 40 });
+        shape.setColor(user.get(login).getColor());
         shape.setStroke(3, borderColor);
         v.setBackground(shape);
     }
 
-    public void createViewMessage(String msg){
+    public void createViewMessage(String login, String msg){
         LinearLayout content = findViewById(R.id.content);
         TextView messages = new TextView(this);
         //messages.setBackgroundColor(getRandomColor());
@@ -121,8 +136,8 @@ public class Chat extends AppCompatActivity {
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(6,4,6,0);
         messages.setLayoutParams(params);
-        messages.setPadding(2,6,2,6);
-        customView(messages, 111);
+        messages.setPadding(20,10,20,10);
+        customView(login, messages, 111);
         chatItems.add(messages);
         messages.setText(chatItems.toString());
         messages.setText(Html.fromHtml(msg));
@@ -172,8 +187,11 @@ public class Chat extends AppCompatActivity {
                         String login = Objects.requireNonNull(dc.getDocument().getData().get("login")).toString();
                         String time = Objects.requireNonNull(dc.getDocument().getData().get("time")).toString();
                         time = filteringTimestamp(time);
+                        if(!user.containsKey(login)){
+                            user.put(login, new User(login));
+                        }
                         String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
-                        createViewMessage(toSend);
+                        createViewMessage(login, toSend);
                         break;
                     case MODIFIED:
                         Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
