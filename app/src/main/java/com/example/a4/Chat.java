@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -135,7 +136,9 @@ public class Chat extends AppCompatActivity {
         LinearLayout.LayoutParams params;
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(6,4,6,0);
+        if(login.equals(getUsername())){ params.gravity = Gravity.RIGHT; }
         messages.setLayoutParams(params);
+        //messages.setGravity(Gravity.RIGHT);
         messages.setPadding(20,10,20,10);
         customView(login, messages, 111);
         chatItems.add(messages);
@@ -190,7 +193,10 @@ public class Chat extends AppCompatActivity {
                         if(!user.containsKey(login)){
                             user.put(login, new User(login));
                         }
-                        String toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
+                        String toSend;
+                        if(login.equals(getUsername()))
+                        	toSend = txt;
+												else toSend = "<b>&lt;"+login+"&gt;</b>: "+txt+" <i>||"+time+"<i>";
                         createViewMessage(login, toSend);
                         break;
                     case MODIFIED:
